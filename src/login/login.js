@@ -24,19 +24,19 @@ function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Email:
-        <input type="email" value={email} onChange={handleEmailChange} />
-      </label>
-      <br />
-      <label>
-        Password:
-        <input type="password" value={password} onChange={handlePasswordChange} />
-      </label>
+    <div style={{display:'flex', justifyContent:'center', marginTop:'20%'}}>
+        <form onSubmit={handleSubmit}>
+      <label>Email:</label>
+      <br/>
+      <input type="email" value={email} onChange={handleEmailChange} />
+      <br/>
+      <label>Password:</label>
+      <br/>
+      <input type="password" value={password} onChange={handlePasswordChange} />
       <br />
       <button type="submit">Log In</button>
     </form>
+    </div>
   );
 }
 
