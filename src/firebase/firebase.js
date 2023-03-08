@@ -1,20 +1,33 @@
-import { initializeApp } from 'firebase/app';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import 'firebase/compat/storage';
+
+import { initializeAuth} from 'firebase/auth';
+
 import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { getApps, getApp } from 'firebase/app';
+
 const firebaseConfig = {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-    authDomain: "imaginepix-48d04.firebaseapp.com",
-    projectId: "imaginepix-48d04",
-    storageBucket: "imaginepix-48d04.appspot.com",
-    messagingSenderId: "129286995768",
-    appId: "1:129286995768:web:d008d6da14ba4e9019cbcd",
-    measurementId: "G-R2K5DNPXTF"
-  };
+  apiKey: "AIzaSyA7V4VWZL3gJReY2d3BLnhHmwm3Nb0uCcI",
+  authDomain: "imaginepix-48d04.firebaseapp.com",
+  projectId: "imaginepix-48d04",
+  storageBucket: "imaginepix-48d04.appspot.com",
+  messagingSenderId: "129286995768",
+  appId: "1:129286995768:web:d008d6da14ba4e9019cbcd",
+  measurementId: "G-R2K5DNPXTF"
+}
 
-  const app = initializeApp(firebaseConfig);
-  const firestore = getFirestore(app);
-  const auth = getAuth(app);
+let app;
+if (!getApps().length) {
+    app = firebase.initializeApp(firebaseConfig);
+}
 
-export { firestore, auth };
+app = getApp(); 
+
+const auth = initializeAuth(app);
+
+const db = getFirestore();
+    
+export { db, auth, firebase };

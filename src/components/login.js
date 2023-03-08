@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { auth } from '../firebase/firebase';
+import { firebase } from '../firebase/firebase';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -16,15 +16,18 @@ function LoginForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await auth.signInWithEmailAndPassword(email, password);
+      await firebase.auth().signInWithEmailAndPassword(email, password);
       // Handle successful login
+      alert('logged in')
     } catch (error) {
       // Handle login error
+      console.log(error)
+
     }
   };
 
   return (
-    <div style={{display:'flex', justifyContent:'center', marginTop:'20%'}}>
+    <div style={{display:'flex', justifyContent:'center'}}>
         <form onSubmit={handleSubmit}>
       <label>Email:</label>
       <br/>
