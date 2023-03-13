@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { firebase } from "../firebase/firebase";
+import { Form, Button } from 'react-bootstrap';
 
 function SignupForm() {
   const [email, setEmail] = useState("");
@@ -40,60 +41,61 @@ function SignupForm() {
       return;
     }
     try {
-      await firebase.auth().createUserWithEmailAndPassword(email, password);
+      const userCredential = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      // Set user profile properties
+      await user.updateProfile({
+        displayName: `${firstName} ${lastName}`,
+        email: email,
+        photoURL : 'https://firebasestorage.googleapis.com/v0/b/imaginepix-657fb.appspot.com/o/profile_pictures%2Fdeafult%20pic.png?alt=media&token=45095a8e-c1ea-42ad-a76c-ec408f7d1569',
+        
+      });
       // Do something with the newly created user object
-      alert('user created')
+      alert("user created");
     } catch (error) {
       console.error(error);
       // Handle signup error
-      alert('error')
+      alert("error");
     }
   };
-  
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <form onSubmit={handleSubmit}>
-        <label>Email:</label>
-        <br />
-        <input type="email" value={email} onChange={handleEmailChange} />
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="email">
+          <Form.Label>Email:</Form.Label>
+          <Form.Control type="email" value={email} onChange={handleEmailChange} />
+        </Form.Group>
 
-        <br />
-        <label>First Name:</label>
-        <br />
-        <input type="text" value={firstName} onChange={handleFirstNameChange} />
+        <Form.Group controlId="firstName">
+          <Form.Label>First Name:</Form.Label>
+          <Form.Control type="text" value={firstName} onChange={handleFirstNameChange} />
+        </Form.Group>
 
-        <br />
-        <label>Last Name:</label>
-        <br />
-        <input type="text" value={lastName} onChange={handleLastNameChange} />
+        <Form.Group controlId="lastName">
+          <Form.Label>Last Name:</Form.Label>
+          <Form.Control type="text" value={lastName} onChange={handleLastNameChange} />
+        </Form.Group>
 
-        <br />
-        <label>Date of Birth:</label>
-        <br />
-        <input type="date" value={dob} onChange={handleDobChange} />
-        <br />
+        <Form.Group controlId="dob">
+          <Form.Label>Date of Birth:</Form.Label>
+          <Form.Control type="date" value={dob} onChange={handleDobChange} />
+        </Form.Group>
 
-        <label>Password:</label>
-        <br />
-        <input
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
+        <Form.Group controlId="password">
+          <Form.Label>Password:</Form.Label>
+          <Form.Control type="password" value={password} onChange={handlePasswordChange} />
+        </Form.Group>
 
-        <br />
-        <label>Confirm Password:</label>
-        <br />
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={handleConfirmPasswordChange}
-        />
+        <Form.Group controlId="confirmPassword">
+          <Form.Label>Confirm Password:</Form.Label>
+          <Form.Control type="password" value={confirmPassword} onChange={handleConfirmPasswordChange} />
+        </Form.Group>
 
-        <br />
-        <button type="submit">Sign Up</button>
-      </form>
+        <Button variant="primary" className="btn-sm mt-2" type="submit">Sign Up</Button>
+      </Form>
     </div>
   );
 }
