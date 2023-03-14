@@ -1,17 +1,22 @@
 import { useState, useEffect } from 'react';
 import { firebase } from '../firebase/firebase';
 
-function LoginPage({isLoggedIn, setIsLoggedIn}) {
+function LoginPage() {
+
+  const [currentUser, setCurrentUser] = useState(null);
+
   useEffect(() => {
-    // Persist the user's login state
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-      .then(() => {
-        console.log('User state persisted');
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+    .then(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        setCurrentUser(user);
+      }
+    });
+    });
   }, []);
+
+  {currentUser&&console.log(currentUser.email)}
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,10 +33,7 @@ function LoginPage({isLoggedIn, setIsLoggedIn}) {
     event.preventDefault();
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
-      // Handle successful login
-      setIsLoggedIn(true)
     } catch (error) {
-      // Handle login error
       console.log(error);
     }
   };

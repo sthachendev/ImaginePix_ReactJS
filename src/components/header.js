@@ -1,19 +1,18 @@
-import React, {useState} from "react";
+import React from "react";
 import { Navbar, Nav, Form, FormControl, Dropdown } from "react-bootstrap";
+import {firebase} from "../firebase/firebase";
+import 'firebase/auth';
 
-const Header = ({isLoggedIn, setIsLoggedIn}) => {
+const Header = () => {
 
-    const [user, setUser] = useState(null);
-
-    const handleLogout = () => {
-    // Remove authentication tokens or cookies
-    // For example, using local storage:
-    localStorage.removeItem('authToken');
-
-    // Update state or context to reflect user is no longer logged in
-    setUser(null);
-    setIsLoggedIn(false); // set the isLoggedIn state to false
+    const handleLogout = async () => {
+      try {
+        await firebase.auth().signOut();
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+    
 
     return (
     <>
@@ -27,7 +26,7 @@ const Header = ({isLoggedIn, setIsLoggedIn}) => {
             <FormControl type="text" placeholder="Search" className="mr-sm-2" />
           </Form>
           <Nav className="ml-auto">
-            <Dropdown>
+           {firebase.auth().currentUser&& <Dropdown>
               <Dropdown.Toggle variant="light" id="profile-dropdown">
                 <img
                   src="/logo192.png"
@@ -43,7 +42,7 @@ const Header = ({isLoggedIn, setIsLoggedIn}) => {
                 <Dropdown.Divider />
                 <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

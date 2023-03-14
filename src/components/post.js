@@ -167,9 +167,9 @@ export default function Post({ post }) {
           <div className='d-flex'>
           <img src={post.photoURL} width='40px' height='40px' className='border rounded bg-primary'/>
           <p className='ms-2'>{post.postByDisplayName}</p>
-          <p className='mt-2 position-absolute end-0 me-3 text-secondary'>
-            {post.date.toDate().toLocaleString('en-GB', { hour: 'numeric', minute: 'numeric', hour12: true }).toUpperCase()} 
-            {post.date.toDate().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+          <p className='position-absolute end-0 me-3 text-secondary'>
+            {/* {post.date.toDate().toLocaleString('en-GB', { hour: 'numeric', minute: 'numeric', hour12: true }).toUpperCase()}  */}
+            {/* {post.date.toDate().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} */}
           </p>
           </div>
 
@@ -177,29 +177,34 @@ export default function Post({ post }) {
             {/* comment section */}
           <div className='d-flex '>
           {/* <img src={currentUser.photoURL} width='30px' height='30px' className='border rounded-circle bg-primary'/> */}
-           <input className=' form-control ms-2 me-2 w-100 border-0' 
-           value={comment} onChange={handleCommentChange}
-           placeholder='Write a comment here'></input>
-           <span onClick={handleAddComment} className='btn btn-sm btn-outline-secondary h-100'>Send</span>
+           {currentUser && (
+            <>
+             <input className=' form-control ms-2 me-2 w-100 border-0' 
+             value={comment} onChange={handleCommentChange}
+             placeholder='Write a comment here'></input>
+             <span onClick={handleAddComment} className='btn btn-sm btn-outline-secondary h-100'>Send</span>
+             </>
+           )}
           </div>
 
           <div className='border border-danger mt-3'>
           {comments
-            .filter(comment => comment.postId === post.id)
-            .sort((a, b) => b.timestamp.toDate() - a.timestamp.toDate()) // sort in reverse chronological order
-            .map(comment => (
-              <div key={comment.id} className='border p-2'>
-                <span className='d-flex'>
-                  <img src={post.photoURL} width='30px' height='30px' className='border rounded-circle bg-primary'/>
-                  <span className='mt-1 ms-2 text-secondary'>{comment.displayName}</span>
-                  <p className='mt-2 position-absolute end-0 me-3 text-secondary'>
-                    {comment.timestamp && getTimeAgo(comment.timestamp.toDate())}
-                  </p>
-                </span>
-                <p>: {comment.text}</p>
-              </div>
-            ))
-          }
+          .filter(comment => comment.postId === post.id)
+          .sort((a, b) => b.timestamp?.toDate() - a.timestamp?.toDate()) // add a check for null values
+          .map(comment => (
+            <div key={comment.id} className='border p-2'>
+              <span className='d-flex'>
+                <img src={post.photoURL} width='30px' height='30px' className='border rounded-circle bg-primary'/>
+                <span className='mt-1 ms-2 text-secondary'>{comment.displayName}</span>
+                <p className='mt-2 position-absolute end-0 me-3 text-secondary'>
+                  {comment.timestamp && getTimeAgo(comment.timestamp.toDate())}
+                </p>
+              </span>
+              <p>: {comment.text}</p>
+            </div>
+          ))
+        }
+
 
         </div>
 
